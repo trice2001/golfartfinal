@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Hub Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* General Layout */
+        body {
+            margin: 0;
+            font-family: Helvetica, sans-serif;
+            display: flex;
+        }
+
+        /* Sidebar Container */
+        .sidebar {
+            width: 20%;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #1abc9c;
+        }
+
+        /* Sidebar Menu */
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-item {
+            position: relative;
+            cursor: pointer;
+            padding: 10px;
+            background-color: #444;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background-color: #555;
+        }
+
+        .menu-item i {
+            margin-right: 10px;
+        }
+
+        /* Dropdown Submenu */
+        .submenu {
+            list-style: none;
+            padding-left: 20px;
+            margin-top: 5px;
+            display: none; /* Initially hidden */
+        }
+
+        .submenu li {
+            padding: 8px;
+            background-color: #555;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submenu li:hover {
+            background-color: #666;
+        }
+
+        /* Main Content Area */
+        .dashboard-content {
+            margin-left: auto;
+            width: 80%;
+            background-color: #f4f4f4;
+            min-height: 100vh;
+        }
+
+        .dashboard-header h1 {
+            color: #ffffff;
+            font-size: 2rem;
+			
+        }
+
+        .dashboard-section {
+            display: none;
+        }
+
+        .dashboard-section:not(.hidden) {
+            display: block;
+        }
+	.categories-container {
+    display: flex;
+    justify-content: center;
+    background-color: #1aa4bc ;
+    padding: 10px 0;
+    border-bottom: 2px solid #16a085;
+    margin-bottom: 20px;
+}
+
+.categories-container ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+	
+}
+
+.categories-container li {
+    margin: 0;
+}
+
+.categories-container a {
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #1c1f1e;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.categories-container a:hover {
+    background-color: #148f77;
+    color: #fff;
+}
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #0b0707, #1c1c1c);
+    color:#ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.dashboard-header:hover {
+    background-color: #1a1a1a;
+}
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+    }
+}
+
+.dashboard-header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.dashboard-header .actions {
+    display: flex;
+    gap: 10px;
+}
+
+.dashboard-header .actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1abc9c;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dashboard-header .actions button:hover {
+    background-color: #148f77;
+}
+ /* KPI card styles */
+        .kpi-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            flex: 1;
+            margin: 10px;
+        }
+
+        .kpi-card h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .kpi-card span {
+            font-size: 1.2rem;
+            color: #16a085;
+            font-weight: bold;
+        }
+
+        .kpi-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+#total-sales h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+#total-sales table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#total-sales table th, table td {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 8px;
+}
+
+#total-sales table th {
+    background-color: #1b4180;
+    color: white;
+}
+
+.total-label {
+    text-align: right;
+    font-weight: bold;
+}
+
+#total-sales tfoot td {
+    background-color: #e8f5e9;
+    font-weight: bold;
+}
+
+.add-sales-form {
+    margin-top: 20px;
+}
+
+#total-sales form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#total-sales form input {
+    margin-left: 10px;
+    padding: 5px;
+}
+
+#total-sales form button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #1b4180;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#total-sales form button:hover {
+    background-color: #45a049;
+}
+#top-selling-products table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    font-size: 14px;
+    text-align: left;
+    background-color: #fff;
+}
+
+#top-selling-products thead {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+#top-selling-products th, td {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+}
+
+#top-selling-products tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#top-selling-products tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: inline-block;
+}
+
+/* Badge Colors */
+.best-seller {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.low-stock {
+    background-color: #FFC107;
+    color: black;
+}
+
+.in-stock {
+    background-color: #2196F3;
+    color: white;
+}
+		
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Categories</h2>
+        <ul class="sidebar-menu">
+            <!-- Sales Metrics -->
+            <li class="menu-item" onclick="toggleDropdown(this)">
+                <i class="fas fa-chart-line"></i> Sales Metrics
+                <ul class="submenu">
+                    <li onclick="showSection('total-sales')" class="bi-bar-chart">Total Sales</li>
+                    <li onclick="showSection('top-selling-products')" class="bi-star-fill">Top Selling Products</li>
+                </ul>
+            </li>
+            <!-- Customer Metrics -->
+            <li class="menu-item" onclick="toggleDropdown(this)">
+                <i class="fas fa-users"></i> Customer Metrics
+                <ul class="submenu">
+                    <li onclick="showSection('active-customers')" class="bi-person-check">Active Customers</li>
+                    <li onclick="showSection('new-vs-returning')" class="bi-person-plus">New vs Returning Customers</li>
+                    <li onclick="showSection('cart-abandonment')" class="bi-cart-x">Cart Abandonment Rate</li>
+                </ul>
+            </li>
+            <!-- Traffic Metrics -->
+            <li class="menu-item" onclick="toggleDropdown(this)">
+                <i class="fas fa-traffic-light"></i> Traffic Metrics
+                <ul class="submenu">
+                    <li onclick="showSection('total-vistors')" class="bi-eye">Total Visitors</li>
+                    <li onclick="showSection('traffic-sources')" class="bi-globe">Traffic Sources</li>
+                    <li onclick="showSection('top-landing-pages')" class="bi-file-earmark">Top Landing Pages</li>
+                    <li onclick="showSection('geo-distribution')" class="bi-geo-alt">Geographic Distribution</li>
+                </ul>
+            </li>
+            <!-- Product Performance -->
+            <li class="menu-item" onclick="toggleDropdown(this)">
+                <i class="fas fa-box"></i> Product Performance
+                <ul class="submenu">
+                    <li onclick="showSection('top-viewed-products')" class="bi-eye-fill">Top Viewed Products</li>
+                    <li onclick="showSection('low-stock-products')" class="bi-exclamation-circle">Products with Low Stock</li>
+                    <li onclick="showSection('best-selling-products')" class="bi-trophy">Best-Selling Products</li>
+                </ul>
+            </li>
+            <!-- Marketing Metrics -->
+            <li class="menu-item" onclick="toggleDropdown(this)">
+                <i class="fas fa-bullhorn"></i> Marketing Metrics
+                <ul class="submenu">
+                    <li onclick="showSection('campaign-performance')" class="bi-bar-chart">Campaign Performance</li>
+                    <li onclick="showSection('promo-code-usage')" class="bi-gift">Promo Code Usage</li>
+                    <li onclick="showSection('socialmedia-conversion')" class="bi-linkedin">Social Media Conversion</li>
+                </ul>
+            </li>
+            <!-- Orders -->
+            <li class="menu-item" onclick="toggleDropdown(this)">
+                <i class="fas fa-clipboard-list"></i> Orders
+                <ul class="submenu">
+                    <li onclick="showSection('number-of-orders')" class="bi-clipboard">Number of Orders</li>
+                    <li onclick="showSection('pending-completed-orders')" class="bi-hourglass">Pending Orders</li>
+                    <li onclick="showSection('returns-refunds')" class="bi-arrow-return-left">Returns and Refunds</li>
+                </ul>
+            </li>
+            <!-- Financial Metrics -->
+            <li class="menu-item" onclick="toggleDropdown(this)">
+                <i class="fas fa-credit-card"></i> Financial Metrics
+                <ul class="submenu">
+                    <li onclick="showSection('gross-revenue')" class="bi-cash-stack">Gross Revenue</li>
+                    <li onclick="showSection('profit-margins')" class="bi-graph-up">Profit Margins</li>
+                    <li onclick="showSection('taxes-collected')" class="bi-calculator">Taxes</li>
+                </ul>
+            </li>
+            <!-- Customer Feedback -->
+            <li class="menu-item" onclick="toggleDropdown(this)">
+                <i class="fas fa-comments"></i> Customer Feedback
+                <ul class="submenu">
+                    <li onclick="showSection('product-reviews')" class="bi-star ">Product Reviews</li>
+                    <li onclick="showSection('customer-satisfaction-overtime')" class="bi-chat-left">Customer Satisfaction</li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+   
+
+<div class="dashboard-content">
+    <header class="dashboard-header">
+        <h1>Data Hub over view</h1>
+		  <div class="actions">
+        <!-- Refresh Button -->
+        <button class="btn btn-secondary" onclick="location.reload();">
+            <i class="fas fa-sync-alt"></i> Refresh Data
+        </button>
+
+        <!-- Download Button -->
+        <a href="report.pdf" class="btn btn-primary" download>
+            <i class="fas fa-download"></i> Download Report
+        </a>
+    </div>
+  </header>
+     <div class="categories-container">
+        <ul class="sct">
+            <li><a href="#sales">Sales Metrics</a></li>
+            <li><a href="#customers">Customer Metrics</a></li>
+            <li><a href="#traffic">Traffic Metrics</a></li>
+        </ul>
+    </div>
+	
+	 <!-- KPI Section -->
+        <div class="kpi-container">
+            <div class="kpi-card">
+                <h3>Total Sales</h3>
+                <span>$120,000</span>
+            </div>
+            <div class="kpi-card">
+                <h3>Visitors</h3>
+                <span>25,000</span>
+            </div>
+            <div class="kpi-card">
+                <h3>Top Product</h3>
+                <span>Golf Club Pro</span>
+            </div>
+            <div class="kpi-card">
+                <h3>Conversion Rate</h3>
+                <span>5.2%</span>
+            </div>
+        </div>
+		
+		 <!-- Sales Trends -->
+       <section id="sales-trends">
+    <h2>Sales Trends</h2>
+    <canvas id="salesTrendsChart" width="350" height="150"></canvas>
+</section>
+</div>
+<script>
+    // Data for the sales trends chart
+    const salesData = {
+        labels: ["January", "February", "March", "April", "May", "June"], // Months on x-axis
+        datasets: [
+            {
+                label: "Revenue ($)",
+                data: [10000, 12000, 15000, 18000, 22000, 25000], //  sales data
+                borderColor: "#1689a0", // Line color
+                backgroundColor: "rgba(22, 160, 133, 0.2)", // Area fill under the line
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4, // Smooth curve for the line
+                
+            }
+        ]
+    };
+
+    // Configuration for the sales trends chart
+    const salesConfig = {
+        type: "line", // Line chart
+        data: salesData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: "top", // Position of the legend
+                },
+                tooltip: {
+                    enabled: true, // Enable tooltips for hovering over data points
+                    callbacks: {
+                        label: (context) => {
+                            return `$${context.raw.toLocaleString()}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Months", // Label for the x-axis
+                        color: "#333",
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: "Revenue ($)", // Label for the y-axis
+                        color: "#333",
+                    },
+                    beginAtZero: true, // Start y-axis at 0
+                    ticks: {
+                        callback: (value) => `$${value.toLocaleString()}` // Format y-axis values as currency
+                    }
+                }
+            }
+        }
+    };
+
+    // Render the chart
+    const ctx = document.getElementById("salesTrendsChart").getContext("2d");
+    new Chart(ctx, salesConfig);
+</script>
+
+ <!-- Container for all dashboard sections -->      
+ 
+ <!-- total sales -->
+    <div id="total-sales" class="dashboard-section hidden">
+                <h2>Total Sales</h2>
+                <div class="active-customers-table">
+         <form id="customerForm">
+        <label for="customerName">Customer Name:</label>
+        <input type="text" id="customerName" placeholder="Enter customer name" required>
+        <label for="email">Email:</label>
+        <input type="text" id="email" placeholder="Enter email address" required>
+        <label for="lastOrderDate">Last Order Date:</label>
+        <input type="date" id="lastOrderDate" required>
+        <button type="submit">Add Customer</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Email</th>
+                <th>Last Order Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="customerBody">
+            <!-- Dynamically added rows -->
+        </tbody>
+        <tfoot>
+            <tr class="total-row">
+                <td colspan="3">Total Active Customers:</td>
+                <td id="totalCustomers">0</td>
+            </tr>
+        </tfoot>
+    </table>
+   </div>
+    <script>
+        document.getElementById("customerForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const customerName = document.getElementById("customerName").value;
+            const email = document.getElementById("email").value;
+            const lastOrderDate = document.getElementById("lastOrderDate").value;
+
+            if (!customerName || !email || !lastOrderDate) {
+                alert("Please enter valid details!");
+                return;
+            }
+
+            // Determine the status based on the last order date
+            const today = new Date();
+            const orderDate = new Date(lastOrderDate);
+            const timeDiff = today - orderDate;
+            const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            const status = daysDiff <= 30 ? "Active" : "Inactive";
+
+            // Add a new row to the table
+            const customerBody = document.getElementById("customerBody");
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>${customerName}</td>
+                <td>${email}</td>
+                <td>${lastOrderDate}</td>
+                <td>${status}</td>
+            `;
+            customerBody.appendChild(newRow);
+
+            // Update total active customers
+            updateTotalCustomers();
+
+            // Clear the form
+            document.getElementById("customerForm").reset();
+        });
+
+        function updateTotalCustomers() {
+            const rows = document.querySelectorAll("#customerBody tr");
+            let activeCount = 0;
+
+            rows.forEach(row => {
+                const status = row.cells[3].innerText;
+                if (status === "Active") activeCount++;
+            });
+
+            document.getElementById("totalCustomers").textContent = activeCount;
+        }
+    </script>
+
+ 
+<!--top selling products -->
+             <div id="top-selling-products" class="dashboard-section hidden">
+        <h2>Top Selling Products</h2>
+        <div class="table-container">
+            <table id="top-selling-products-table">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Units Sold</th>
+                        <th>Revenue</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+	<script src="script.js"></script>
+	<script>
+	// Data for the top-selling products
+const topSellingProducts = [
+    { name: "Deluxe Golf Set", unitsSold: 350, revenue: "$52,500", status: "Best Seller" },
+    { name: "Pro Golf Ball Pack", unitsSold: 200, revenue: "$10,000", status: "In Stock" },
+    { name: "Golf Club Set", unitsSold: 150, revenue: "$30,000", status: "In Stock" },
+    { name: "Golf Glove Pair", unitsSold: 50, revenue: "$1,250", status: "Low Stock" },
+];
+
+// Function to populate the Top Selling Products table
+function populateTopSellingProductsTable() {
+    const tableBody = document.querySelector("#top-selling-products-table tbody");
+
+    topSellingProducts.forEach(product => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${product.name}</td>
+            <td>${product.unitsSold}</td>
+            <td>${product.revenue}</td>
+            <td>
+                <span class="badge ${getBadgeClass(product.status)}">${product.status}</span>
+            </td>
+        `;
+
+        tableBody.appendChild(row);
+    });
+}
+
+// Badge class for status
+function getBadgeClass(status) {
+    if (status === "Best Seller") return "best-seller";
+    if (status === "Low Stock") return "low-stock";
+    if (status === "In Stock") return "in-stock";
+    return "";
+}
+
+// Populate the table on page load
+document.addEventListener("DOMContentLoaded", () => {
+    populateTopSellingProductsTable();
+});
+
+	</script>
+
+             
+ <!-- customer metrics -->
+ 
+ <!-- active customers-->
+
+  <div id="active-customers" class="dashboard-section hidden">
+    <h2>Active Customers</h2>
+             <div class="active-customers-table">
+         <form id="customerForm">
+        <label for="customerName">Customer Name:</label>
+        <input type="text" id="customerName" placeholder="Enter customer name" required>
+        <label for="email">Email:</label>
+        <input type="text" id="email" placeholder="Enter email address" required>
+        <label for="lastOrderDate">Last Order Date:</label>
+        <input type="date" id="lastOrderDate" required>
+        <button type="submit">Add Customer</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Email</th>
+                <th>Last Order Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="customerBody">
+            <!-- Dynamically added rows -->
+        </tbody>
+        <tfoot>
+            <tr class="total-row">
+                <td colspan="3">Total Active Customers:</td>
+                <td id="totalCustomers">0</td>
+            </tr>
+        </tfoot>
+    </table>
+   </div>
+    <script>
+        document.getElementById("customerForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const customerName = document.getElementById("customerName").value;
+            const email = document.getElementById("email").value;
+            const lastOrderDate = document.getElementById("lastOrderDate").value;
+
+            if (!customerName || !email || !lastOrderDate) {
+                alert("Please enter valid details!");
+                return;
+            }
+
+            // Determine the status based on the last order date
+            const today = new Date();
+            const orderDate = new Date(lastOrderDate);
+            const timeDiff = today - orderDate;
+            const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            const status = daysDiff <= 30 ? "Active" : "Inactive";
+
+            // Add a new row to the table
+            const customerBody = document.getElementById("customerBody");
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>${customerName}</td>
+                <td>${email}</td>
+                <td>${lastOrderDate}</td>
+                <td>${status}</td>
+            `;
+            customerBody.appendChild(newRow);
+
+            // Update total active customers
+            updateTotalCustomers();
+
+            // Clear the form
+            document.getElementById("customerForm").reset();
+        });
+
+        function updateTotalCustomers() {
+            const rows = document.querySelectorAll("#customerBody tr");
+            let activeCount = 0;
+
+            rows.forEach(row => {
+                const status = row.cells[3].innerText;
+                if (status === "Active") activeCount++;
+            });
+
+            document.getElementById("totalCustomers").textContent = activeCount;
+        }
+    </script>
+<!-- new vs returning customers -->
+  <div id="new-vs-returning" class="dashboard-section hidden">
+    <h2>New vs Returning Customers</h2>
+    <canvas id="customers-pie-chart" width="400" height="200"></canvas>
+ </div>
+<script>
+    // Data for New vs Returning Customers
+    const customerData = {
+        labels: ["New Customers", "Returning Customers"],
+        datasets: [
+            {
+                data: [60, 40], // Example: 60% new, 40% returning
+                backgroundColor: ["#3498db", "#e74c3c"],
+                hoverBackgroundColor: ["#2980b9", "#c0392b"],
+            },
+        ],
+    };
+
+    // Chart configuration
+    const customerConfig = {
+        type: "pie",
+        data: customerData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: "top",
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            const data = customerData.datasets[0].data;
+                            const total = data.reduce((a, b) => a + b, 0);
+                            const value = data[tooltipItem.dataIndex];
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${tooltipItem.label}: ${value} (${percentage}%)`;
+                        },
+                    },
+                },
+            },
+        },
+    };
+
+    // Initialize the pie chart
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById("customers-pie-chart").getContext("2d");
+        new Chart(ctx, customerConfig);
+    });
+</script>
+ <!-- cart abandoment rate -->
+ <div id="cart-abandonment" class="dashboard-section hidden">
+    <h2>Cart Abandonment Rate</h2>
+    <canvas id="cart-abandonment-chart" width="300" height="100"></canvas>
+</div>
+<script>
+    // Data for Cart Abandonment Rate
+    const cartAbandonmentData = {
+        labels: ["Completed Checkouts", "Abandoned Carts"],
+        datasets: [
+            {
+                data: [70, 30], // Example: 70% completed, 30% abandoned
+                backgroundColor: ["#2ecc71", "#e74c3c"],
+                hoverBackgroundColor: ["#27ae60", "#c0392b"],
+                borderWidth: 2,
+            },
+        ],
+    };
+
+    // Chart configuration
+    const cartAbandonmentConfig = {
+        type: "doughnut",
+        data: cartAbandonmentData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: "top",
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            const data = cartAbandonmentData.datasets[0].data;
+                            const total = data.reduce((a, b) => a + b, 0);
+                            const value = data[tooltipItem.dataIndex];
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${tooltipItem.label}: ${value} (${percentage}%)`;
+                        },
+                    },
+                },
+            },
+        },
+    };
+
+    // Initialize the donut chart
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById("cart-abandonment-chart").getContext("2d");
+        new Chart(ctx, cartAbandonmentConfig);
+    });
+</script>
+<!-- traffic metrics -->
+   <!-- top landing pages -->
+    <div id="top-landing-pages" class="dashboard-section hidden">
+     <h2>Top Landing Pages</h2>
+	    <table id="landingPagesTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Landing Page URL</th>
+          <th onclick="sortTable(1)">Visits</th>
+          <th onclick="sortTable(2)">Bounce Rate (%)</th>
+          <th onclick="sortTable(3)">Avg. Time on Page</th>
+          <th onclick="sortTable(4)">Conversion Rate (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>/home</td>
+          <td>1,500</td>
+          <td>40</td>
+          <td>2:30</td>
+          <td>4.5</td>
+        </tr>
+        <tr>
+          <td>/product-category</td>
+          <td>1,200</td>
+          <td>30</td>
+          <td>3:10</td>
+          <td>7.0</td>
+        </tr>
+        <tr>
+          <td>/about-us</td>
+          <td>800</td>
+          <td>50</td>
+          <td>1:45</td>
+          <td>2.0</td>
+        </tr>
+       </tbody>
+      </table>
+	</div>
+	<script>
+	function sortTable(columnIndex) {
+  const table = document.getElementById("landingPagesTable");
+  const rows = Array.from(table.rows).slice(1);
+  const isNumeric = columnIndex !== 0;
+  
+  // Sort rows based on the selected column
+  rows.sort((rowA, rowB) => {
+    const cellA = rowA.cells[columnIndex].textContent.trim();
+    const cellB = rowB.cells[columnIndex].textContent.trim();
+
+    if (isNumeric) {
+      return parseFloat(cellA.replace(':', '.')) - parseFloat(cellB.replace(':', '.'));
+    } else {
+      return cellA.localeCompare(cellB);
+    }
+  });
+
+  // Append sorted rows back to the table body
+  const tbody = table.tBodies[0];
+  rows.forEach(row => tbody.appendChild(row));
+}
+
+	</script>
+    <!-- total vistors -->
+	 <div id="total-vistors" class="dashboard-section hidden">
+    <h2>Total Vistors</h2>
+	 <canvas id="visitorsChart" width="400" height="200"></canvas>
+  </div>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js">
+
+	// Data for the chart
+const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const data = {
+  labels: labels,
+  datasets: [
+    {
+      label: "Total Visitors",
+      data: [1200, 1500, 1100, 1700, 1400, 1800, 2000, 2100, 1900, 2200, 2400, 2500],
+      backgroundColor: "rgba(54, 162, 235, 0.2)",
+      borderColor: "rgba(54, 162, 235, 1)",
+      borderWidth: 2,
+      fill: true,
+      tension: 0.4,
+    },
+  ],
+};
+
+// Configuration for the chart
+const config = {
+  type: "line", // Line chart
+  data: data,
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top",
+      },
+      tooltip: {
+        enabled: true,
+      },
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: "Months",
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Visitors",
+        },
+        beginAtZero: true,
+      },
+    },
+  },
+};
+
+// Render the chart
+const ctx = document.getElementById("visitorsChart").getContext("2d");
+new Chart(ctx, config);
+
+	</script>
+<!-- Traffic sources -->
+	 <div id="traffic-sources" class="dashboard-section hidden">
+    <h2>Traffic sources</h2>
+	<canvas id="trafficChart" width="400" height="200"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+  // Data for the chart
+const trafficData = {
+  labels: ["Organic Search", "Direct", "Social Media", "Referral", "Paid Search"],
+  datasets: [
+    {
+      label: "Traffic Sources",
+      data: [40, 25, 15, 10, 10], // Example percentages
+      backgroundColor: [
+        "rgba(54, 162, 235, 0.6)", // Organic Search - Blue
+        "rgba(75, 192, 192, 0.6)", // Direct - Teal
+        "rgba(255, 206, 86, 0.6)", // Social Media - Yellow
+        "rgba(153, 102, 255, 0.6)", // Referral - Purple
+        "rgba(255, 99, 132, 0.6)", // Paid Search - Red
+      ],
+      borderColor: [
+        "rgba(54, 162, 235, 1)",
+        "rgba(75, 192, 192, 1)",
+        "rgba(255, 206, 86, 1)",
+        "rgba(153, 102, 255, 1)",
+        "rgba(255, 99, 132, 1)",
+      ],
+      borderWidth: 1,
+    },
+  ],
+};
+
+// Configuration for the chart
+const trafficConfig = {
+  type: "doughnut", // Doughnut chart
+  data: trafficData,
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            const value = tooltipItem.raw; // Access raw data
+            return `${tooltipItem.label}: ${value}%`;
+          },
+        },
+      },
+    },
+  },
+};
+
+// Render the chart
+const trafficCtx = document.getElementById("trafficChart").getContext("2d");
+new Chart(trafficCtx, trafficConfig);
+  </script>
+
+	<!-- product performance -->
+	<!-- top viewed products -->
+	<div id="top-viewed-products" class="dashboard-section hidden">
+	<h2>Top Viewed Products</h2>
+	<table id="productsTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Rank</th>
+          <th onclick="sortTable(1)">Product Name</th>
+          <th onclick="sortTable(2)">Views</th>
+          <th onclick="sortTable(3)">Category</th>
+          <th onclick="sortTable(4)">Conversion Rate (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Wireless Earbuds</td>
+          <td>3,200</td>
+          <td>Electronics</td>
+          <td>4.5</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Running Shoes</td>
+          <td>2,900</td>
+          <td>Sportswear</td>
+          <td>3.8</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Smartphone Case</td>
+          <td>2,700</td>
+          <td>Accessories</td>
+          <td>5.2</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Yoga Mat</td>
+          <td>2,300</td>
+          <td>Fitness</td>
+          <td>2.9</td>
+        </tr>
+      </tbody>
+    </table>
+
+	</div>
+	<script>
+	function sortTable(columnIndex) {
+  const table = document.getElementById("productsTable");
+  const rows = Array.from(table.rows).slice(1); // Exclude header row
+
+  const isNumeric = columnIndex === 0 || columnIndex === 2 || columnIndex === 4;
+
+  rows.sort((rowA, rowB) => {
+    const cellA = rowA.cells[columnIndex].textContent.trim();
+    const cellB = rowB.cells[columnIndex].textContent.trim();
+
+    if (isNumeric) {
+      return parseFloat(cellA) - parseFloat(cellB);
+    } else {
+      return cellA.localeCompare(cellB);
+    }
+  });
+
+  // Append sorted rows back to the table body
+  const tbody = table.tBodies[0];
+  rows.forEach(row => tbody.appendChild(row));
+}
+                                            
+	</script>
+	 <div id="out-of-stock" class="dashboard-section hidden">
+     <h2>Out of Stock Products</h2>
+      <table id="outOfStockTable">
+       <thead>
+        <tr>
+          <th onclick="sortTable(0)">Product ID</th>
+          <th onclick="sortTable(1)">Product Name</th>
+          <th onclick="sortTable(2)">Category</th>
+          <th onclick="sortTable(3)">Stock Status</th>
+          <th onclick="sortTable(4)">Reorder Date</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+          <td>#1001</td>
+          <td>Wireless Mouse</td>
+          <td>Electronics</td>
+          <td>Out of Stock</td>
+          <td>2024-11-30</td>
+        </tr>
+        <tr>
+          <td>#1002</td>
+          <td>Yoga Mat</td>
+          <td>Fitness</td>
+          <td>Out of Stock</td>
+          <td>2024-12-05</td>
+        </tr>
+        <tr>
+          <td>#1003</td>
+          <td>Running Shoes</td>
+          <td>Sportswear</td>
+          <td>Out of Stock</td>
+          <td>2024-11-28</td>
+        </tr>
+        <tr>
+          <td>#1004</td>
+          <td>Smartphone Case</td>
+          <td>Accessories</td>
+          <td>Out of Stock</td>
+          <td>2024-12-10</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+      <script>
+	  function sortTable(columnIndex) {
+  const table = document.getElementById("outOfStockTable");
+  const rows = Array.from(table.rows).slice(1); // Exclude header row
+
+  const isDateColumn = columnIndex === 4;
+  const isNumeric = columnIndex === 0;
+
+  rows.sort((rowA, rowB) => {
+    const cellA = rowA.cells[columnIndex].textContent.trim();
+    const cellB = rowB.cells[columnIndex].textContent.trim();
+
+    if (isDateColumn) {
+      // Parse and compare dates
+      return new Date(cellA) - new Date(cellB);
+    } else if (isNumeric) {
+      // Compare numbers
+      return parseInt(cellA.replace('#', ''), 10) - parseInt(cellB.replace('#', ''), 10);
+    } else {
+      // Compare text
+      return cellA.localeCompare(cellB);
+    }
+  });
+
+  // Append sorted rows back to the table body
+  const tbody = table.tBodies[0];
+  rows.forEach(row => tbody.appendChild(row));
+  </script>
+}
+ <div id="best-selling" class="dashboard-section hidden">
+        <h2>Best Selling Products</h2>
+        <div class="bar-graph" id="bar-graph">
+            <!-- Graph bars will be dynamically generated here -->
+        </div>
+    </div>
+
+    <script>
+        // Sample data for best-selling products
+        const products = [
+            { name: "Deluxe Golf Set", unitsSold: 350 },
+            { name: "Pro Golf Ball Pack", unitsSold: 200 },
+            { name: "Golf Club Set", unitsSold: 150 },
+            { name: "Golf Glove Pair", unitsSold: 50 }
+        ];
+
+        // Reference to the bar graph container
+        const barGraphContainer = document.getElementById("bar-graph");
+
+        // Function to generate bar graph
+        function generateBarGraph(data) {
+            const maxUnits = Math.max(...data.map(product => product.unitsSold)); // Find the maximum units sold
+            data.forEach(product => {
+                // Create the bar container
+                const bar = document.createElement("div");
+                bar.classList.add("bar");
+
+                // Create the label
+                const label = document.createElement("div");
+                label.classList.add("bar-label");
+                label.textContent = product.name;
+
+                // Create the bar container
+                const barContainer = document.createElement("div");
+                barContainer.classList.add("bar-container");
+
+                // Create the bar fill
+                const barFill = document.createElement("div");
+                barFill.classList.add("bar-fill");
+                barFill.style.width = `${(product.unitsSold / maxUnits) * 100}%`;
+
+                // Create the bar value
+                const barValue = document.createElement("div");
+                barValue.classList.add("bar-value");
+                barValue.textContent = `${product.unitsSold} units`;
+
+                // Append elements
+                barContainer.appendChild(barFill);
+                barContainer.appendChild(barValue);
+                bar.appendChild(label);
+                bar.appendChild(barContainer);
+                barGraphContainer.appendChild(bar);
+            });
+        }
+
+        // Generate the bar graph
+        generateBarGraph(products);
+    </script>
+	<!-- marketing-->
+	<!--promo usage -->
+	  <div id="promo-code" class="dashboard-section hidden">
+        <h2>Promo Code Usage</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Promo Code</th>
+                    <th>Discount (%)</th>
+                    <th>Usage Count</th>
+                    <th>Total Revenue</th>
+                </tr>
+            </thead>
+            <tbody id="promo-table">
+                <!-- Table rows will be dynamically populated -->
+            </tbody>
+        </table>
+    </div>
+     <script>
+	 const promoData = [
+            { code: "SUMMER20", discount: 20, usage: 150, revenue: 12000 },
+            { code: "WINTER10", discount: 10, usage: 75, revenue: 5000 },
+            { code: "FREESHIP", discount: 0, usage: 200, revenue: 8000 },
+            { code: "FLASH50", discount: 50, usage: 25, revenue: 1000 }
+        ];
+
+        // Populate the table with promo data
+        const promoTable = document.getElementById("promo-table");
+
+        promoData.forEach(promo => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${promo.code}</td>
+                <td class="highlight">${promo.discount}%</td>
+                <td>${promo.usage}</td>
+                <td>$${promo.revenue.toLocaleString()}</td>
+            `;
+
+            promoTable.appendChild(row);
+        });
+
+	 </script>
+	 <!-- campaign perfomance -->
+	 <div id="campaign-performance" class="dashboard-section hidden">
+        <h2>Campaign Performance</h2>
+        <canvas id="campaignChart"></canvas>
+    </div>
+
+    <script>
+        // Sample data for campaign performance
+        const campaignData = {
+            labels: ["Campaign A", "Campaign B", "Campaign C", "Campaign D", "Campaign E"],
+            datasets: [{
+                label: "Conversions",
+                data: [120, 90, 150, 80, 200],
+                backgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#4BC0C0",
+                    "#9966FF"
+                ],
+                borderColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#4BC0C0",
+                    "#9966FF"
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const config = {
+            type: "bar",
+            data: campaignData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `Conversions: ${tooltipItem.raw}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Campaigns"
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Conversions"
+                        }
+                    }
+                }
+            }
+        };
+
+        // Render the chart
+        const ctx = document.getElementById("campaignChart").getContext("2d");
+        new Chart(ctx, config);
+    </script>
+	<!-- socialmedia conversion rate -->
+	  <div id="socialmedia-conversion" class="dashboard-section hidden">
+    <h1>Social Media Conversion Rates</h1>
+    <canvas id="conversionGraph" width="600" height="400"></canvas>
+    </div>
+  <script>
+  const canvas = document.getElementById("conversionGraph");
+ const ctx = canvas.getContext("2d");
+
+   // Data for social media platforms and their conversion rates
+   const platforms = ["Facebook", "Instagram", "Twitter", "LinkedIn", "Pinterest"];
+    const colors = ["#4267B2", "#E1306C", "#1DA1F2", "#0077B5", "#BD081C"]; // Platform colors
+
+  // Graph dimensions
+   const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  const barWidth = 60;
+  const barSpacing = 40;
+ const maxRate = 100; // Maximum value for y-axis
+  const chartHeight = canvasHeight - 50; // Space for labels
+
+   // Draw graph axes
+  ctx.strokeStyle = "#aaa";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(50, 20); // Y-axis start
+  ctx.lineTo(50, chartHeight); // Y-axis end
+  ctx.lineTo(canvasWidth - 20, chartHeight); // X-axis end
+  ctx.stroke();
+
+// Draw y-axis labels
+  ctx.textAlign = "right";
+  ctx.fillStyle = "#333";
+  ctx.font = "12px Arial";
+  for (let i = 0; i <= maxRate; i += 10) {
+  const y = chartHeight - (i / maxRate) * (chartHeight - 40);
+  ctx.fillText(i + "%", 45, y);
+}
+
+// Draw bars for each platform
+platforms.forEach((platform, index) => {
+  const barHeight = (conversionRates[index] / maxRate) * (chartHeight - 40);
+  const x = 50 + (barWidth + barSpacing) * index + 10;
+  const y = chartHeight - barHeight;
+
+  // Draw bar
+  ctx.fillStyle = colors[index];
+  ctx.fillRect(x, y, barWidth, barHeight);
+
+  // Add platform labels
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#333";
+  ctx.fillText(platform, x + barWidth / 2, chartHeight + 20);
+
+  // Add conversion rate on top of bars
+  ctx.fillText(conversionRates[index] + "%", x + barWidth / 2, y - 5);
+});
+
+  </script>
+<!-- financial metrics -->
+<!-- gross revenue -->
+  <div id="gross-revenue" class="dashboard-section hidden">
+    <h1>Gross Revenue Report</h1>
+    <table class="revenue-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Revenue (KES)</th>
+          <th>Percentage of Total</th>
+        </tr>
+      </thead>
+      <tbody id="revenue-body">
+        <!-- Rows will be dynamically inserted here -->
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>Total</th>
+          <th id="total-revenue"></th>
+          <th>100%</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <script>
+  // Data for the revenue table
+const revenueData = [
+  { category: "Golf Clubs", revenue: 50000 },
+  { category: "Golf Balls", revenue: 20000 },
+  { category: "Apparel", revenue: 15000 },
+  { category: "Accessories", revenue: 10000 },
+  { category: "Others", revenue: 5000 },
+];
+
+// Calculate the total revenue
+const totalRevenue = revenueData.reduce((sum, item) => sum + item.revenue, 0);
+
+// Generate the table rows dynamically
+const revenueBody = document.getElementById("revenue-body");
+revenueData.forEach((item) => {
+  const percentage = ((item.revenue / totalRevenue) * 100).toFixed(2) + "%";
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${item.category}</td>
+    <td>$${item.revenue.toLocaleString()}</td>
+    <td>${percentage}</td>
+  `;
+  revenueBody.appendChild(row);
+});
+
+// Populate the total revenue in the footer
+document.getElementById("total-revenue").textContent = `$${totalRevenue.toLocaleString()}`;
+
+  </script>  
+	<!-- profit margins -->
+	<div id="profit-margins" class="dashboard-section hidden">
+    <h1> Profit Margins</h1>
+    <table class="profit-margin-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Revenue (KES)</th>
+          <th>Cost (KES)</th>
+          <th>Profit Margin (%)</th>
+        </tr>
+      </thead>
+      <tbody id="profit-margin-body">
+        <!-- Rows will be dynamically inserted here -->
+      </tbody>
+    </table>
+  </div>
+  <script>
+  // Data for the profit margins table
+const profitMarginData = [
+  { category: "Golf Clubs", revenue: 50000, cost: 30000 },
+  { category: "Golf Balls", revenue: 20000, cost: 12000 },
+  { category: "Apparel", revenue: 15000, cost: 8000 },
+  { category: "Accessories", revenue: 10000, cost: 7000 },
+  { category: "Others", revenue: 5000, cost: 3000 },
+];
+
+// Function to calculate profit margin percentage
+function calculateProfitMargin(revenue, cost) {
+  const profit = revenue - cost;
+  return ((profit / revenue) * 100).toFixed(2);
+}
+
+// Generate table rows dynamically
+const profitMarginBody = document.getElementById("profit-margin-body");
+profitMarginData.forEach((item) => {
+  const profitMargin = calculateProfitMargin(item.revenue, item.cost);
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${item.category}</td>
+    <td>${item.revenue.toLocaleString()}</td>
+    <td>${item.cost.toLocaleString()}</td>
+    <td>${profitMargin}%</td>
+  `;
+  profitMarginBody.appendChild(row);
+});
+  </script>
+  <!-- taxes -->
+  <div id="taxes-collected" class="dashboard-section hidden">
+    <h1>Taxes Collected by Product Category</h1>
+    <canvas id="taxGraph" width="400" height="200"></canvas>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </div>
+  <script>
+  // Tax data for the golf shop
+const taxData = {
+  labels: ["Golf Clubs", "Golf Balls", "Apparel", "Accessories", "Others"],
+  values: [5000, 2000, 1500, 1000, 500], // Example tax amounts in USD
+};
+
+// Chart.js setup
+const ctx = document.getElementById("taxGraph").getContext("2d");
+const taxChart = new Chart(ctx, {
+  type: "bar", // Bar chart type
+  data: {
+    labels: taxData.labels, // Product categories
+    datasets: [
+      {
+        label: "Taxes Collected (USD)",
+        data: taxData.values, // Tax values
+        backgroundColor: [
+          "#4caf50",
+          "#8bc34a",
+          "#cddc39",
+          "#ffeb3b",
+          "#ffc107",
+        ],
+        borderColor: [
+          "#388e3c",
+          "#689f38",
+          "#afb42b",
+          "#fbc02d",
+          "#ffa000",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "Tax Amount (USD)",
+        },
+      },
+      x: {
+        title: {
+          display: true,
+          text: "Product Categories",
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: true,
+        position: "top",
+      },
+    },
+  },
+});
+
+  </script>
+ <!-- orders -->
+ <!-- orders summary -->
+  <div id="orders-summary" class="dashboard-section hidden">
+    <h1>Orders Summary</h1>
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer Name</th>
+          <th>Product(s)</th>
+          <th>Total Cost (KES)</th>
+          <th>Status</th>
+          <th>Order Date</th>
+        </tr>
+      </thead>
+      <tbody id="orders-body">
+        <!-- Rows will be dynamically inserted here -->
+      </tbody>
+    </table>
+  </div>
+  <script>
+  //  data for the orders summary table
+const ordersData = [
+  {
+    id: "001",
+    customer: "John Doe",
+    products: "Golf Clubs, Golf Balls",
+    total: 300,
+    status: "Completed",
+    date: "2024-11-15",
+  },
+  {
+    id: "002",
+    customer: "Jane Smith",
+    products: "Apparel",
+    total: 150,
+    status: "Pending",
+    date: "2024-11-16",
+  },
+  {
+    id: "003",
+    customer: "Tom Brown",
+    products: "Accessories",
+    total: 75,
+    status: "Canceled",
+    date: "2024-11-17",
+  },
+  {
+    id: "004",
+    customer: "Lucy Green",
+    products: "Golf Balls",
+    total: 50,
+    status: "Completed",
+    date: "2024-11-18",
+  },
+];
+
+// Generate table rows dynamically
+const ordersBody = document.getElementById("orders-body");
+ordersData.forEach((order) => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${order.id}</td>
+    <td>${order.customer}</td>
+    <td>${order.products}</td>
+    <td>${order.total.toLocaleString()}</td>
+    <td><span class="status ${order.status.toLowerCase()}">${order.status}</span></td>
+    <td>${order.date}</td>
+  `;
+  ordersBody.appendChild(row);
+});
+ </script>
+ <!-- pending vs completed orders -->
+ <div id="pending-completed-orders" class="dashboard-section hidden">
+    <h1>Pending vs Completed Orders</h1>
+    <canvas id="ordersGraph" width="400" height="200"></canvas>
+  </div>
+<script>
+//  order status data
+const orderStatusData = {
+  completed: 120, // Number of completed orders
+  pending: 30,    // Number of pending orders
+  canceled: 15,   // Optional: add canceled orders if needed
+};
+
+// Prepare data for the doughnut chart
+const data = {
+  labels: ["Completed", "Pending", "Canceled"], // Status labels
+  datasets: [
+    {
+      label: "Orders Status",
+      data: [orderStatusData.completed, orderStatusData.pending, orderStatusData.canceled],
+      backgroundColor: ["#4caf50", "#ff9800", "#f44336"], // Colors for each segment
+      borderColor: ["#388e3c", "#fb8c00", "#d32f2f"],     // Borders for each segment
+      borderWidth: 1,
+    },
+  ],
+};
+
+// Chart.js configuration
+const ctx = document.getElementById("ordersGraph").getContext("2d");
+const ordersChart = new Chart(ctx, {
+  type: "doughnut", // Doughnut chart type
+  data: data,
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: "top",
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const value = context.raw;
+            const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+            const percentage = ((value / total) * 100).toFixed(2);
+            return `${context.label}: ${value} (${percentage}%)`;
+          },
+        },
+      },
+    },
+  },
+});
+
+</script>
+<!-- customer feedbaack -->
+  <!-- product reviews -->
+<div id="product-reviews" class="dashboard-section hidden">
+        <h2>Product Reviews</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Customer Name</th>
+                    <th>Review</th>
+                    <th>Rating</th>
+                    <th>Review Date</th>
+                </tr>
+            </thead>
+            <tbody id="reviews-table">
+                <!-- Table rows will be dynamically populated -->
+            </tbody>
+        </table>
+ </div>
+  <script>
+      // data for product reviews
+        const reviewsData = [
+            { 
+                productName: "Golf Club Pro",
+                customerName: "John Doe",
+                review: "Excellent product! Great balance and durability.",
+                rating: 5,
+                date: "2024-11-10"
+            },
+            {
+                productName: "Deluxe Golf Bag",
+                customerName: "Jane Smith",
+                review: "Spacious and stylish. Could use more pockets.",
+                rating: 4,
+                date: "2024-11-12"
+            },
+            {
+                productName: "Premium Golf Balls",
+                customerName: "Chris Lee",
+                review: "Best golf balls I've ever used.",
+                rating: 5,
+                date: "2024-11-15"
+            },
+            {
+                productName: "Golf Gloves Set",
+                customerName: "Patricia Brown",
+                review: "Comfortable and affordable.",
+                rating: 4,
+                date: "2024-11-18"
+            }
+        ];
+
+        // Populate the table with review data
+        const reviewsTable = document.getElementById("reviews-table");
+
+        reviewsData.forEach(review => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${review.productName}</td>
+                <td>${review.customerName}</td>
+                <td>${review.review}</td>
+                <td class="rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</td>
+                <td class="date">${review.date}</td>
+            `;
+
+            reviewsTable.appendChild(row);
+        });
+    </script>
+	<!-- customer satsfication -->
+	<div id="customer-satisfaction-overtime" class="dashboard-section hidden">
+        <h2>Customer Satisfaction Over Time</h2>
+        <canvas id="customer-Satisfaction-overtime"></canvas>
+
+    </div>
+    
+    <script>
+       
+        const satisfactionData = {
+            labels: ["January", "February", "March", "April", "May", "June", "July"],
+            datasets: [
+                {
+                    label: "Customer Satisfaction (%)",
+                    data: [85, 88, 84, 90, 87, 91, 89],
+                    fill: false,
+                    borderColor: "#007BFF",
+                    tension: 0.1,
+                    pointBackgroundColor: "#007BFF",
+                    pointBorderColor: "#fff",
+                    pointHoverBackgroundColor: "#fff",
+                    pointHoverBorderColor: "#007BFF",
+                    borderWidth: 2
+                }
+            ]
+        };
+
+        // Config for the chart
+        const config = {
+            type: "line",
+            data: satisfactionData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: "top"
+                    },
+                    tooltip: {
+                        enabled: true
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Months"
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Satisfaction (%)"
+                        }
+                    }
+                }
+            }
+        };          
+
+        // Initialize and render the chart
+        const ctx = document.getElementById("customerSatisfactionChart").getContext("2d");
+        new Chart(ctx, config);
+    </script>
+    
+<script>
+        // Function to toggle dropdown visibility
+        function toggleDropdown(menuItem) {
+            const submenu = menuItem.querySelector('.submenu');
+            submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Function to show sections
+        function showSection(id) {
+            const sections = document.querySelectorAll('.dashboard-section');
+            sections.forEach(section => section.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+			}
+	//fuction shows top products
+    document.addEventListener("DOMContentLoaded", function () {
+        const topProductsMenu = document.getElementById("top-products-menu");
+        const dashboardContainer = document.querySelector(".dashboard-container");
+
+        topProductsMenu.addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent default link behavior if using <a>
+            // Toggle visibility
+            const isHidden = dashboardContainer.style.display === "none";
+            dashboardContainer.style.display = isHidden ? "block" : "none";
+        });
+    });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - Golf Store</title>
+  <link rel="stylesheet" href="styles.css">
+<style>
+
+/* Variables for theme colors */
+:root {
+  --primary-color: #28a745; /* Green color matching homepage */
+  --secondary-color: #333333; /* Dark gray for text */
+  --background-color: #f8f9fa; /* Light background color */
+  --text-color: #333333;
+  --light-text-color: #ffffff;
+  --button-hover-color: #218838; /* Darker green for button hover */
+}
+
+/* Shop Page Layout */
+.shop-page {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1850px;
+  margin: 0 auto;
+  background-color: var(--background-color);
+}
+
+/* Sidebar styling */
+/* Adjust shop page container for full width */
+.shop-page {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  width: 100%; /* Use full width of the page */
+  margin: 0 auto;
+  background-color: var(--background-color);
+}
+
+/* Narrower Sidebar */
+.sidebar {
+  width: 15%; /* Adjust width as needed */
+  background-color: var(--background-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: var(--text-color);
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: black;
+  padding: 10px 20px;
+  color: var(--light-text-color);
+}
+
+.nav-logo {
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--light-text-color);
+}
+/* Search Bar in Navbar */
+.navbar .search-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.navbar .search-bar input {
+  padding: 8px;
+  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.navbar .search-bar button {
+  padding: 8px 15px;
+  background-color: #ffffff;
+  color: var(--primary-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar .search-bar button:hover {
+  background-color: var(--light-text-color);
+  color: var(--primary-color);
+}
+/* Style the category container */
+.categories {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.categories h2 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Hide subcategories by default */
+.subcategory-list {
+    display: none;
+    padding-left: 20px; /* Indentation for subcategories */
+    list-style-type: circle;
+}
+
+/* Style the buttons for dropdowns */
+.dropdown-btn {
+    background: none;
+    border: none;
+    color: blue;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.dropdown-btn:hover {
+    text-decoration: underline;
+}
+
+/* Show the subcategories when the parent item is hovered */
+.category-list > li:hover .subcategory-list {
+    display: block;
+}
+
+/* Optional styling for the main list */
+.category-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.category-list > li {
+    margin-bottom: 10px;
+}
+
+
+/* Expand product grid to occupy remaining space */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  width: 85%; 
+  }
+
+
+.product-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  color: var(--secondary-color);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  max-height: 400px; 
+   
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-card img {
+  max-height: 150px; /* Control image size */
+  object-fit: cover;
+}
+
+.product-card h4 {
+  margin: 10px 0;
+  font-size: 18px;
+  color: var(--secondary-color);
+}
+
+.product-card p {
+  font-size: 16px;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.product-card button {
+  background-color: var(--primary-color);
+  color: var(--light-text-color);
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.product-card button:hover {
+  background-color: var(--button-hover-color);
+}
+/* Sale/Discount Badge */
+.badge.sale {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Product Card Price with Discount */
+.price .original-price {
+  text-decoration: line-through;
+  color: #888;
+  margin-right: 5px;
+}
+
+/* Product Reviews */
+.product-reviews {
+  font-size: 14px;
+  color: #888;
+  margin-top: 8px;
+}
+
+/* Recommended Products Section */
+.recommended-products {
+  margin-top: 40px;
+}
+
+.recommended-products h3 {
+  font-size: 24px;
+  color: var(--secondary-color);
+  margin-bottom: 20px;
+}
+
+.recommended-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.recommended-card {
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.recommended-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.recommended-card h4 {
+  margin: 10px 0;
+  font-size: 16px;
+  color: var(--secondary-color);
+}
+
+.recommended-card .price {
+  font-size: 16px;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+/* Floating Cart Summary */
+.floating-cart-summary {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 250px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: var(--text-color);
+  z-index: 100;
+}
+
+.floating-cart-summary h4 {
+  font-size: 18px;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.floating-cart-summary p {
+  font-size: 16px;
+  color: #555;
+}
+
+.floating-cart-summary button {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  margin: 5px 0;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.floating-cart-summary button:hover {
+  background-color: var(--button-hover-color);
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination span {
+  cursor: pointer;
+  color: var(--text-color);
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.pagination span:hover {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+
+</style>
+</head>
+<body>
+<nav class="navbar">
+    <a href="index.html" class="nav-logo">Golf Store</a>
+   
+    <div class="search-bar">
+      <input type="text" placeholder="Search products...">
+      <button>Search</button>
+    </div>
+  </nav>
+
+  <!-- Breadcrumb Navigation -->
+  <nav class="breadcrumb">
+    <a href="index.html">Home</a> > <a href="shop.html">Shop</a>
+  </nav>
+
+  <section class="shop-page">
+    <!-- Sidebar for Categories and Filters -->
+    <aside class="sidebar">
+      <h2>Categories</h2>
+      <ul>
+        <li><a href="#">Golf Clubs</a></li>
+		<ul class="dropdown-content">
+		<li><a href="shop.html">Wedges</a></li>
+               <li><a href="shop.html">putter</a></li>
+               <li><a href="shop.html">Antique</a></li>
+               <li><a href="shop.html">Woods</a></li>
+               <li><a href="shop.html">Irons</a></li>
+               <li><a href="shop.html">Trainers</a></li>
+               <li><a href="shop.html">Jigger</a></li>
+               <li><a href="shop.html">Rescue</a></li>
+        </ul>
+		
+        <li><a href="#">Balls </a></li>
+        <li><a href="#">Shafts </a></li>
+		 <ul class="dropdown-content">
+         <li><a href="shop.html">Composite</a></li>
+         </ul>
+		<li><a href="#">Bags</a></li>
+		<li><a href="#">gloves</a></li>
+        <li><a href="#">Accessories</a></li>
+		<ul class="dropdown-content">
+            <li><a href="shop.html">Markers</a></li>
+            <li><a href="shop.html">Tees</a></li>
+		 <li><a href="shop.html">Pencils</a></li>
+             <li><a href="shop.html">Gloves</a></li>
+               <li><a href="shop.html">Club Covers</a></li>
+               </ul>
+	
+      </ul>
+
+      <h2>Filter by Price</h2>
+      <input type="range" min="0" max="500" step="10">
+      
+      <h2>Brand</h2>
+      <label><input type="checkbox"> Brand A</label><br>
+      <label><input type="checkbox"> Brand B</label><br>
+      <label><input type="checkbox"> Brand C</label><br>
+    </aside>
+
+    <!-- Main Product Grid Area -->
+    <div class="product-grid">
+      <!-- Filter and Sorting Options -->
+      <div class="filter-sort">
+        <span>Sort by:</span>
+        <select>
+          <option value="popularity">Popularity</option>
+          <option value="price-low">Price (Low to High)</option>
+          <option value="price-high">Price (High to Low)</option>
+          <option value="newest">Newest Arrivals</option>
+        </select>
+      </div>
+
+      <!-- Product Cards -->
+      <div class="product-card">
+        <img src="images/product1.jpg" alt="Golf Club">
+        <h3>Premium Golf Club</h3>
+        <p>ksh.</p>
+        <button onclick="openQuickView('product1')">Quick View</button>
+        <button>Add to Cart</button>
+      </div>
+      
+      <div class="product-card">
+        <img src="images/product2.jpg" alt="Golf Ball">
+        <h3>High Performance Golf Ball</h3>
+        <p>ksh.</p>
+        <button onclick="openQuickView('product2')">Quick View</button>
+        <button>Add to Cart</button>
+      </div>
+
+      <!-- Repeat .product-card for each product -->
+
+      <!-- Pagination Links -->
+      <div class="pagination">
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">Next</a>
+      </div>
+    </div>
+  </section>
+  
+     <div class="recommended-products">
+      <h3>Recommended Products</h3>
+      <div class="recommended-grid">
+        <div class="recommended-card">
+          <img src="recommended-product1.jpg" alt="Recommended Product 1">
+          <h4>Product Name</h4>
+          <p class="price">kes</p>
+          <button>Add to Cart</button>
+        </div>
+        <div class="recommended-card">
+          <img src="recommended-product2.jpg" alt="Recommended Product 2">
+          <h4>Product Name</h4>
+          <p class="price">kes</p>
+          <button>Add to Cart</button>
+        </div>
+        <!-- More recommended products as needed -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Cart Summary -->
+<div class="floating-cart-summary">
+  <h4>Cart Summary</h4>
+  <p>Items in Cart: 3</p>
+  <p>Total: kes</p>
+  <button>View Cart</button>
+  <button>Checkout</button>
+</div>
+  <!-- Quick View Modal -->
+  <div class="overlay" onclick="closeQuickView()"></div>
+  <div class="quick-view" id="quickView">
+    <img src="images/product1.jpg" alt="Product Image">
+    <h3>Product Name</h3>
+    <p>kes</p>
+    <p>Brief description of the product...</p>
+    <button onclick="closeQuickView()">Close</button>
+    <button>Add to Cart</button>
+  </div>
+
+  <!-- JavaScript to Toggle Quick View -->
+  <script>
+    function openQuickView(productId) {
+      document.getElementById('quickView').style.display = 'block';
+      document.querySelector('.overlay').style.display = 'block';
+    }
+
+    function closeQuickView() {
+      document.getElementById('quickView').style.display = 'none';
+      document.querySelector('.overlay').style.display = 'none';
+    }
+	
+	document.querySelectorAll('.dropdown-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const subcategoryList = button.nextElementSibling;
+        subcategoryList.style.display = 
+            subcategoryList.style.display === 'block' ? 'none' : 'block';
+    });
+});
+
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title  -->
+    <title>GOLF ART</title>
+
+    <!-- Favicon  -->
+    <link rel="icon" href="">
+<style>
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    color: #333;
+}
+/* Checkout Section */
+.checkout_area {
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin: 40px auto;
+    max-width: 1200px;
+}
+/* Left Form (Shipping Info) */
+.checkout_details_area {
+    width: 50%;
+}
+
+.page-title  {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+	background-color:#171616;
+	color: white;
+}
+form .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+form input,
+form select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: bold;
+}
+/* Right Column (Summary & Order Details) */
+.order-details-confirmation {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+    width: 40%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.order-details-confirmation h5 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.order-details-form {
+    list-style: none;
+    padding: 0;
+}
+
+.order-details-form li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.order-details-form span {
+    font-size: 16px;
+    color: #555;
+}
+/* Pay Now Button */
+.checkout-btn a {
+    display: block;
+    text-align: center;
+    background-color: #470202;
+    color: #fff;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+	border: none;
+    text-decoration: none;
+    margin-top: 30px;
+    transition: 0.3s;
+}
+
+.checkout-btn a:hover {
+    background-color: #470202;
+	transform: translateY(-3px);
+}
+
+</style>
+
+</head>
+
+
+<body>
+   
+           <!-- ##### Breadcumb Area Start ##### -->
+    <div class="breadcumb_area bg-img" style="background-image: ;">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12">
+                    <div class="page-title text-center">
+                        <h2>Checkout</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <!-- ##### Right Side Cart End ##### -->
+
+    
+
+    <!-- ##### Checkout Area Start ##### -->
+    <div class="checkout_area section-padding-80">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-12 col-md-6">
+                    <div class="checkout_details_area mt-50 clearfix">
+
+                        <div class="cart-page-heading mb-30">
+                            <h5>Billing Address</h5>
+                        </div>
+
+                        <form action="#" method="post">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="first_name">First Name <span>*</span></label>
+                                    <input type="text" class="form-control" id="first_name" value="" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="last_name">Last Name <span>*</span></label>
+                                    <input type="text" class="form-control" id="last_name" value="" required>
+                                </div>
+                            
+                                <div class="col-12 mb-3">
+                                    <label for="country">Country <span>*</span></label>
+                                    <select class="w-100" id="country">
+                                        <option value="KE">Kenya</option>
+                                        <option value="TZ">Tanzania</option>
+                                        <option value="UG">Uganda</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="street_address">Address <span>*</span></label>
+                                    <input type="text" class="form-control mb-3" id="street_address" value="">
+                                    <input type="text" class="form-control" id="street_address2" value="">
+                                </div>
+                               
+                                <div class="col-12 mb-3">
+                                    <label for="city">Town/City <span>*</span></label>
+                                    <input type="text" class="form-control" id="city" value="">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="phone_number">Phone No <span>*</span></label>
+                                    <input type="number" class="form-control" id="phone_number" min="0" value="">
+                                </div>
+                                <div class="col-12 mb-4">
+                                    <label for="email_address">Email Address </label>
+                                    <input type="email" class="form-control" id="email_address" >
+                                </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-5 ml-lg-auto">
+                    <div class="order-details-confirmation">
+
+                        <div class="cart-page-heading">
+                            <h5>Order No.</h5>
+                            <p>The Details</p>
+                        </div>
+
+                        <ul class="order-details-form mb-4">
+                            <li><span>Product</span> <span></span></li>
+                            <li><span>Subtotal</span> <span></span></li>
+                            <li><span>Shipping</span> <span></span></li>
+                            <li><span>Total</span> <span></span></li>
+                        </ul>
+						<div class="checkout-btn mt-100">
+                    <a href="checkout.html" class="btn essence-btn">Pay Now</a>
+                </div>
+</div>
+</div>
+</div>
+</div>
+
+                      
+    <!-- jQuery (Necessary for All JavaScript Plugins) -->
+    <script src="js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="js/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Plugins js -->
+    <script src="js/plugins.js"></script>
+    <!-- Classy Nav js -->
+    <script src="js/classy-nav.min.js"></script>
+    <!-- Active js -->
+    <script src="js/active.js"></script>
+
+</body>
+
+</html>
